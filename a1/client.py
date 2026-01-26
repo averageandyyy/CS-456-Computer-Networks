@@ -22,6 +22,18 @@ class Client:
         Send GET request to the server via UDP socket.
         The request contains the filename and port number of TCP client socket
         for the server to send the requested file on.
+
+        In ACTV mode, client sends GET request containing file requested and client TCP port number for
+        the server to connect on via UDP. Client receives 200 OK or 404 NOT FOUND response via UDP.
+        If 200 OK, client expects server to connect to its TCP socket to send the file.
+
+        In PASV mode, client sends GET request containing file requested and "PASV" via UDP. Server responds
+        with "PASV <port>" via UDP which specifies the port number the client should connect to via TCP
+        to receive the file.
+        404 NOT FOUND is also sent via UDP if file not found.
+
+        In ACTV, client listens on TCP socket for server to connect to.
+        In PASV, server listens on TCP socket for client to connect to.
         """
         if self.mode == "ACTV":
             self.tcp_client_socket.bind(("", 0))  # Bind to any available port
@@ -68,6 +80,11 @@ class Client:
             response, _ = self.udp_client_socket.recvfrom(2048)
             response = response.decode()
             print(f"Received response: {response}")
+            if response == "404 NOT FOUND":
+                print(f"File '{self.filename}' not found on server.")
+                self.udp_client_socket.close()
+                return
+
             parts = response.split()
             if len(parts) == 2 and parts[0] == "PASV":
                 pasv_port = int(parts[1])

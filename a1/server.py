@@ -4,7 +4,9 @@ from socket import *
 
 
 class Server:
-    def __init__(self, host="localhost", port=1025, storage_directory="."):
+    def __init__(self, host="0.0.0.0", port=1025, storage_directory="."):
+        # 0.0.0.0 is what allows us to run the program on any machine
+        # This is because 0.0.0.0 listens on all available interfaces and not just a specific address
         self.host = host
         self.port = port
         self.storage_directory = storage_directory
@@ -13,7 +15,7 @@ class Server:
         print(f"SERVER_PORT={self.port}")
         print(f"Server Address={self.host}")
 
-    def receive_passive_get_request(self):
+    def receive_get_request(self):
         """
         Receive GET request via UDP socket and creates new TCP socket to send the requested file.
         """
@@ -76,7 +78,7 @@ class Server:
 
                         tcp_server_socket.close()
                     file.close()
-                except FileNotFoundError:
+                except (FileNotFoundError, IsADirectoryError):
                     # Send 404 NOT FOUND response via UDP
                     self.server_socket.sendto("404 NOT FOUND".encode(), client_address)
                     print(
@@ -92,7 +94,7 @@ def main():
 
     storage_directory = sys.argv[1]
     server = Server(storage_directory=storage_directory)
-    server.receive_passive_get_request()
+    server.receive_get_request()
 
 
 if __name__ == "__main__":

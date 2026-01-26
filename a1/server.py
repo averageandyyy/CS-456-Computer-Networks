@@ -11,6 +11,7 @@ class Server:
         self.server_socket = socket(AF_INET, SOCK_DGRAM)  # UDP
         self.server_socket.bind((self.host, self.port))
         print(f"SERVER_PORT={self.port}")
+        print(f"Server Address={self.host}")
 
     def receive_passive_get_request(self):
         """

@@ -115,10 +115,30 @@ def main():
         )
         sys.exit(1)
 
-    server_address = sys.argv[1]
-    server_port = int(sys.argv[2])
-    mode = sys.argv[3]
-    filename = sys.argv[4]
+    try:
+        server_address = sys.argv[1]
+        server_port = int(sys.argv[2])
+        mode = sys.argv[3]
+        filename = sys.argv[4]
+
+        if mode not in ["ACTV", "PASV"]:
+            raise ValueError("Mode must be 'ACTV' or 'PASV'")
+
+        if server_port < 1024 or server_port > 65535:
+            raise ValueError("Port number must be between 1024 and 65535")
+
+        if not filename:
+            raise ValueError("Filename cannot be empty")
+
+        if not server_address:
+            raise ValueError("Server address cannot be empty")
+    # catch all
+    except Exception as e:
+        print(f"Error parsing arguments: {e}")
+        print(
+            "Usage: python client.py <server_address> <server_port> <mode> <filename>"
+        )
+        sys.exit(1)
 
     client = Client(server_address, server_port, mode, filename)
     client.send_get_request()

@@ -93,6 +93,10 @@ def main():
         sys.exit(1)
 
     storage_directory = sys.argv[1]
+    if not storage_directory:
+        print("Please provide a valid storage directory.")
+        sys.exit(1)
+
     server = Server(storage_directory=storage_directory)
     server.receive_get_request()
 

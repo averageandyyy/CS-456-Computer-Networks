@@ -32,6 +32,7 @@ class Server:
                         tcp_server_socket.bind(("", 0))  # Bind to any available port
                         tcp_server_socket.listen(1)
                         pasv_port = tcp_server_socket.getsockname()[1]
+                        print(f"R_PORT={pasv_port}")
                         # Send PASV response via UDP
                         pasv_response = f"PASV {pasv_port}"
                         self.server_socket.sendto(

@@ -27,6 +27,7 @@ class Client:
             self.tcp_client_socket.bind(("", 0))  # Bind to any available port
             self.tcp_client_socket.listen(1)
             tcp_port = self.tcp_client_socket.getsockname()[1]
+            print(f"R_PORT={tcp_port}")
             get_request = f"GET {self.filename} {tcp_port}"
             self.udp_client_socket.sendto(
                 get_request.encode(), (self.server_address, self.server_port)

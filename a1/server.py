@@ -10,13 +10,18 @@ class Server:
         self.host = "0.0.0.0"
         self.storage_directory = storage_directory
         self.server_socket = socket(AF_INET, SOCK_DGRAM)  # UDP
-        self.server_socket.bind((self.host, 0))
+        self.server_socket.bind((self.host, 0))  # We let OS assign an available port
         print(f"SERVER_PORT={self.server_socket.getsockname()[1]}")
         print(f"Server Address={self.host}")
 
     def receive_get_request(self):
         """
-        Receive GET request via UDP socket and creates new TCP socket to send the requested file.
+        Receive GET request via UDP socket.
+
+        If ACTV request, server connects to client TCP socket via port number specified in GET request
+        and sends the requested file via TCP.
+        If PASV request, server responds with PASV <port> via UDP where <port> is the port number
+        server listens on for client to connect to via TCP to receive the requested file.
         """
         while True:
             print("Waiting for GET request...")

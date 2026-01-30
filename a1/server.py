@@ -4,15 +4,14 @@ from socket import *
 
 
 class Server:
-    def __init__(self, host="0.0.0.0", port=1025, storage_directory="."):
+    def __init__(self, storage_directory="."):
         # 0.0.0.0 is what allows us to run the program on any machine
         # This is because 0.0.0.0 listens on all available interfaces and not just a specific address
-        self.host = host
-        self.port = port
+        self.host = "0.0.0.0"
         self.storage_directory = storage_directory
         self.server_socket = socket(AF_INET, SOCK_DGRAM)  # UDP
-        self.server_socket.bind((self.host, self.port))
-        print(f"SERVER_PORT={self.port}")
+        self.server_socket.bind((self.host, 0))
+        print(f"SERVER_PORT={self.server_socket.getsockname()[1]}")
         print(f"Server Address={self.host}")
 
     def receive_get_request(self):

@@ -11,7 +11,7 @@
 - On the other machine/terminal (i.e. `ubuntu2404-004`), first `rm` the `received_*` files via `rm received_*`. Then,  run the client
   via `bash client.sh ubuntu2404-002.student.cs.uwaterloo.ca SERVER_PORT ACTV hello_world.txt`, where `SERVER_PORT` was the output from
   the server program. You should see `R_PORT` being printed. We can check the received file in `received_hello_world.txt`!
-- We can repeat this with `PASV` and `goodbye_world.txt` via `bash client.sh ubuntu2404-002.student.cs.uwaterloo.ca 1025 PASV
+- We can repeat this with `PASV` and `goodbye_world.txt` via `bash client.sh ubuntu2404-002.student.cs.uwaterloo.ca SERVER_PORT PASV
   goodbye_world.txt`. Observe `R_PORT` from the server and `received_goodbye_world.txt` on the client machine.
 - To test the assignment on a single machine, pick either one to `ssh` into and repeat the above steps of `unzip`ing, `cd`ing and
   `rm`ing test files. Using `tmux` for instance, create two terminal instances. On one instance, run the server as above. On the other
